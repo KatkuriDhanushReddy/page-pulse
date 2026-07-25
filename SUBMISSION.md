@@ -6,12 +6,12 @@ Use this as the checklist when you DM [@realshreyanshsingh](https://instagram.co
 
 | Item | URL |
 |---|---|
-| Public GitHub repo | `https://github.com/<you>/page-pulse` |
-| Live deployed service | `https://<your-app>.onrender.com` _(or Railway / Fly)_ |
-| Architecture (Task B) | `https://github.com/<you>/page-pulse/blob/main/docs/architecture.md` |
-| Observability / rollback | `https://github.com/<you>/page-pulse/blob/main/docs/observability.md` |
-| AI usage note | `https://github.com/<you>/page-pulse/blob/main/docs/ai-usage.md` |
-| Google Drive folder (view access) | optional mirror of the same links |
+| Public GitHub repo | https://github.com/KatkuriDhanushReddy/page-pulse |
+| Live deployed service | `https://<your-service>.onrender.com` _(after Render deploy)_ |
+| Architecture (Task B) | https://github.com/KatkuriDhanushReddy/page-pulse/blob/main/docs/architecture.md |
+| Observability / rollback | https://github.com/KatkuriDhanushReddy/page-pulse/blob/main/docs/observability.md |
+| AI usage note | https://github.com/KatkuriDhanushReddy/page-pulse/blob/main/docs/ai-usage.md |
+| CI (green) | https://github.com/KatkuriDhanushReddy/page-pulse/actions |
 
 Suggested DM text:
 
