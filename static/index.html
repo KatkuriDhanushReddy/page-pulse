@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Page Pulse — URL audit service</title>
+<meta name="description" content="Page Pulse audits any public URL: reachability, latency, TLS validity and page metadata." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d1b2a;
+    --ink-soft: #4a5a6b;
+    --paper: #eef3f7;
+    --line: #cfdae4;
+    --accent: #1245f0;
+    --accent-soft: #dbe4ff;
+    --good: #0d7a4f;
+    --bad: #b3261e;
+    --warn: #9a6200;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: "IBM Plex Sans", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(1100px 700px at 12% -8%, #ffffff 0%, rgba(255,255,255,0) 60%),
+      radial-gradient(900px 620px at 92% 4%, #d9e3ff 0%, rgba(217,227,255,0) 65%),
+      linear-gradient(168deg, #f4f8fb 0%, #e4ecf4 46%, #d6e2ee 100%);
+    min-height: 100vh;
+  }
+
+  .wrap { width: min(1120px, 92vw); margin: 0 auto; }
+
+  /* ---------- hero ---------- */
+  header.hero {
+    position: relative;
+    padding: clamp(28px, 6vh, 64px) 0 clamp(40px, 8vh, 88px);
+    overflow: hidden;
+  }
+
+  .pulse-line {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 220px;
+    width: 100%;
+    opacity: .5;
+    pointer-events: none;
+  }
+
+  .pulse-line path {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 1400;
+    stroke-dashoffset: 1400;
+    animation: trace 4.5s cubic-bezier(.4,0,.2,1) .3s forwards;
+  }
+
+  @keyframes trace { to { stroke-dashoffset: 0; } }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; margin-bottom: clamp(36px, 9vh, 96px);
+  }
+
+  .dot {
+    width: 9px; height: 9px; border-radius: 50%; background: var(--good);
+    box-shadow: 0 0 0 0 rgba(13,122,79,.5);
+    animation: beat 2.4s ease-out infinite;
+  }
+  @keyframes beat {
+    0%   { box-shadow: 0 0 0 0 rgba(13,122,79,.45); }
+    70%  { box-shadow: 0 0 0 12px rgba(13,122,79,0); }
+    100% { box-shadow: 0 0 0 0 rgba(13,122,79,0); }
+  }
+
+  .status {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 13px; letter-spacing: .02em; color: var(--ink-soft);
+  }
+
+  .links a {
+    color: var(--ink-soft); text-decoration: none; font-size: 14px;
+    margin-left: 22px; border-bottom: 1px solid transparent; padding-bottom: 2px;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .links a:hover { color: var(--accent); border-color: var(--accent); }
+
+  .brand {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 800;
+    font-size: clamp(58px, 13.5vw, 190px);
+    line-height: .84;
+    letter-spacing: -.045em;
+    margin: 0;
+  }
+  .brand span { display: block; }
+  .brand .two { color: var(--accent); }
+
+  .reveal { opacity: 0; transform: translateY(18px); animation: rise .9s cubic-bezier(.16,1,.3,1) forwards; }
+  .d1 { animation-delay: .05s; } .d2 { animation-delay: .18s; }
+  .d3 { animation-delay: .32s; } .d4 { animation-delay: .46s; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  .lede {
+    max-width: 46ch; margin: 26px 0 0; font-size: clamp(16px, 1.9vw, 20px);
+    line-height: 1.55; color: var(--ink-soft);
+  }
+
+  /* ---------- console ---------- */
+  .console {
+    background: rgba(255,255,255,.86);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(18px, 3vw, 26px);
+    margin-top: clamp(30px, 5vh, 46px);
+    position: relative; z-index: 2;
+  }
+
+  form { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  input[type="url"] {
+    flex: 1 1 320px; min-width: 0;
+    font-family: "IBM Plex Mono", monospace; font-size: 16px;
+    padding: 15px 16px; color: var(--ink);
+    background: #fff; border: 1px solid var(--line); border-radius: 10px;
+    transition: border-color .18s ease, box-shadow .18s ease;
+  }
+  input[type="url"]:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+
+  button {
+    font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: 16px;
+    padding: 15px 30px; color: #fff; background: var(--accent);
+    border: 1px solid var(--accent); border-radius: 10px; cursor: pointer;
+    transition: transform .15s ease, background .18s ease;
+  }
+  button:hover:not(:disabled) { background: #0b34c2; transform: translateY(-1px); }
+  button:disabled { opacity: .55; cursor: progress; transform: none; }
+
+  .hint { margin: 12px 2px 0; font-size: 13px; color: var(--ink-soft); }
+
+  /* ---------- results ---------- */
+  #out { margin-top: 22px; }
+  #out:empty { display: none; }
+
+  .metrics {
+    display: grid; gap: 1px; background: var(--line);
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  .metric { background: #fff; padding: 16px 18px; }
+  .metric dt { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin: 0 0 6px; }
+  .metric dd {
+    margin: 0; font-family: "IBM Plex Mono", monospace; font-size: 21px; font-weight: 500;
+  }
+  .ok { color: var(--good); } .fail { color: var(--bad); } .warn { color: var(--warn); }
+
+  .detail { margin-top: 16px; font-size: 15px; line-height: 1.6; }
+  .detail p { margin: 0 0 6px; }
+  .detail .k { color: var(--ink-soft); margin-right: 8px; }
+  .mono { font-family: "IBM Plex Mono", monospace; font-size: 13.5px; word-break: break-all; }
+
+  .fadein { animation: rise .5s cubic-bezier(.16,1,.3,1) both; }
+
+  .err {
+    border: 1px solid #f0c2be; background: #fdf2f1; color: var(--bad);
+    padding: 14px 16px; border-radius: 10px; font-size: 15px;
+  }
+
+  footer {
+    padding: 56px 0 40px; margin-top: clamp(40px, 8vh, 90px);
+    border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-soft);
+  }
+  footer a { color: var(--accent); }
+
+  @media (max-width: 620px) {
+    .links a { margin-left: 14px; }
+    .topbar { margin-bottom: 46px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+    .pulse-line path { stroke-dashoffset: 0; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <svg class="pulse-line" viewBox="0 0 1200 220" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,170 L300,170 L330,170 L352,96 L374,196 L398,140 L420,170 L700,170 L726,170 L748,110 L768,186 L790,170 L1200,170" />
+  </svg>
+
+  <div class="wrap">
+    <div class="topbar reveal d1">
+      <span class="status"><span class="dot"></span> service live</span>
+      <nav class="links">
+        <a href="/docs">API reference</a>
+        <a href="/api/health">Health</a>
+      </nav>
+    </div>
+
+    <h1 class="brand">
+      <span class="reveal d2">Page</span>
+      <span class="two reveal d3">Pulse</span>
+    </h1>
+
+    <p class="lede reveal d4">
+      Check any public URL for reachability, latency, certificate validity and page metadata — one request, one structured answer.
+    </p>
+
+    <section class="console reveal d4" aria-label="Run an audit">
+      <form id="f" autocomplete="off">
+        <input id="u" type="url" placeholder="https://example.com" required aria-label="URL to audit" />
+        <button id="b" type="submit">Run audit</button>
+      </form>
+      <p class="hint">Results are cached briefly, so repeat checks of the same URL return instantly.</p>
+      <div id="out" role="status" aria-live="polite"></div>
+    </section>
+  </div>
+</header>
+
+<footer>
+  <div class="wrap">
+    Built for <a href="https://digitalheroesco.com" target="_blank" rel="noopener">Digital Heroes Training Task</a>
+  </div>
+</footer>
+
+<script>
+  const form = document.getElementById('f');
+  const input = document.getElementById('u');
+  const button = document.getElementById('b');
+  const out = document.getElementById('out');
+
+  const esc = (v) => String(v ?? '—').replace(/[&<>"]/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]
+  ));
+
+  const metric = (label, value, cls = '') =>
+    `<div class="metric"><dt>${label}</dt><dd class="${cls}">${esc(value)}</dd></div>`;
+
+  function render(r) {
+    if (r.error) {
+      out.innerHTML = `<div class="err fadein"><strong>${esc(r.error.code)}</strong> — ${esc(r.error.message)}</div>`;
+      return;
+    }
+
+    const tls = r.ssl;
+    const tlsValue = !tls ? 'n/a' : tls.valid ? `${tls.days_remaining}d left` : 'invalid';
+    const tlsClass = !tls ? '' : tls.valid ? 'ok' : 'fail';
+    const ms = Math.round(r.response_time_ms);
+
+    let html = `<dl class="metrics fadein">
+      ${metric('Status', r.status_code ?? '—', r.accessible ? 'ok' : 'fail')}
+      ${metric('Response', ms + ' ms', ms < 800 ? 'ok' : ms < 2500 ? 'warn' : 'fail')}
+      ${metric('TLS', tlsValue, tlsClass)}
+      ${metric('Source', r.cached ? 'cache' : 'live')}
+    </dl>`;
+
+    const m = r.meta;
+    if (m) {
+      html += `<div class="detail fadein">
+        <p><span class="k">Title</span>${esc(m.title)}</p>
+        <p><span class="k">Description</span>${esc(m.description)}</p>
+        <p><span class="k">H1 tags</span>${esc(m.h1_count)}</p>
+        <p><span class="k">Final URL</span><span class="mono">${esc(r.final_url)}</span></p>
+      </div>`;
+    }
+
+    out.innerHTML = html;
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    button.disabled = true;
+    button.textContent = 'Auditing…';
+    out.innerHTML = '';
+
+    try {
+      const response = await fetch('/api/audit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: input.value.trim() })
+      });
+      const body = await response.json();
+
+      if (!response.ok) {
+        const err = body.error || { code: 'error', message: 'Request failed.' };
+        out.innerHTML = `<div class="err fadein"><strong>${esc(err.code)}</strong> — ${esc(err.message)}</div>`;
+      } else {
+        render(body);
+      }
+    } catch (err) {
+      out.innerHTML = `<div class="err fadein">Network error — ${esc(err.message)}</div>`;
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Run audit';
+    }
+  });
+</script>
+</body>
+</html>

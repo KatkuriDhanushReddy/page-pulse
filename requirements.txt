@@ -1,0 +1,10 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+httpx==0.28.1
+pydantic==2.10.4
+selectolax==0.3.27
+python-dotenv==1.0.1
+
+# Optional shared-state backend. Omit for single-instance / in-memory mode.
+motor==3.6.0
+pymongo==4.9.2

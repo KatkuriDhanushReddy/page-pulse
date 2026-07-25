@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: page-pulse
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: LOG_LEVEL
+        value: INFO
+      - key: CACHE_TTL_SECONDS
+        value: "300"
+      - key: RATE_LIMIT_REQUESTS
+        value: "100"
+      - key: RATE_LIMIT_WINDOW_SECONDS
+        value: "3600"
+      - key: AUDIT_TIMEOUT_SECONDS
+        value: "10"
+      - key: AUDIT_MAX_CONCURRENCY
+        value: "50"
+      - key: ALLOW_PRIVATE_TARGETS
+        value: "false"
+      # Leave unset for in-memory demo. Add a Render MongoDB and wire MONGO_URL for shared state.
+      - key: MONGO_URL
+        value: ""
