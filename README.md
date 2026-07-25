@@ -7,9 +7,9 @@ Production-grade URL audit service.
 | | |
 |---|---|
 | Public repo | https://github.com/KatkuriDhanushReddy/page-pulse |
-| Live demo | _add your Render URL after deploy (e.g. `https://page-pulse.onrender.com`)_ |
-| API docs (Swagger) | `{LIVE_URL}/docs` |
-| Health | `GET {LIVE_URL}/api/health` |
+| Live demo | https://page-pulse-u40v.onrender.com |
+| API docs (Swagger) | https://page-pulse-u40v.onrender.com/docs |
+| Health | https://page-pulse-u40v.onrender.com/api/health |
 
 ---
 

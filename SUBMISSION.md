@@ -7,7 +7,7 @@ Use this as the checklist when you DM [@realshreyanshsingh](https://instagram.co
 | Item | URL |
 |---|---|
 | Public GitHub repo | https://github.com/KatkuriDhanushReddy/page-pulse |
-| Live deployed service | `https://<your-service>.onrender.com` _(after Render deploy)_ |
+| Live deployed service | https://page-pulse-u40v.onrender.com |
 | Architecture (Task B) | https://github.com/KatkuriDhanushReddy/page-pulse/blob/main/docs/architecture.md |
 | Observability / rollback | https://github.com/KatkuriDhanushReddy/page-pulse/blob/main/docs/observability.md |
 | AI usage note | https://github.com/KatkuriDhanushReddy/page-pulse/blob/main/docs/ai-usage.md |
@@ -16,8 +16,8 @@ Use this as the checklist when you DM [@realshreyanshsingh](https://instagram.co
 Suggested DM text:
 
 > Hi — SDE qualification submission (Role 03).
-> Live: \<LIVE_URL\>
-> Repo (tests + CI): \<GITHUB_URL\>
+> Live: https://page-pulse-u40v.onrender.com
+> Repo (tests + CI): https://github.com/KatkuriDhanushReddy/page-pulse
 > Task B docs are in `/docs` on the repo.
 > AI usage: `/docs/ai-usage.md`
 
