@@ -8,6 +8,7 @@ Production-grade URL audit service.
 |---|---|
 | Public repo | https://github.com/KatkuriDhanushReddy/page-pulse |
 | Live demo | https://page-pulse-u40v.onrender.com |
+| Google Drive submission | https://drive.google.com/drive/folders/1WlQg8Jcv9aUGQSP5yVyJtR7yAgGJHjU9?usp=sharing |
 | API docs (Swagger) | https://page-pulse-u40v.onrender.com/docs |
 | Health | https://page-pulse-u40v.onrender.com/api/health |
 
